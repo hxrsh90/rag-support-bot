@@ -9,6 +9,20 @@ A Retrieval-Augmented Generation (RAG) support bot using LangChain, FAISS, Huggi
 - LLM-powered answers via Ollama (Gemma2:2b)
 - Flask API for question answering
 
+## Customizing Context
+
+You can add your own `.txt` files to the `rag_api/support_docs/` directory to provide custom context for any use case, industry, or knowledge base. For example, you can add:
+- Company FAQs
+- Product manuals
+- Policies and procedures
+- Knowledge base articles
+
+After adding or updating files, **rebuild the FAISS index**:
+```sh
+python build_index.py
+```
+This will update the context your bot uses to answer questions.
+
 ## Setup
 
 1. **Clone the repo:**
