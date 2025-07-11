@@ -1,0 +1,90 @@
+{
+  "nodes": [
+    {
+      "id": "ManualTrigger",
+      "parameters": {},
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "id": "SetQuery",
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "query",
+              "value": "What is your return policy?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Set Query",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [300, 300]
+    },
+    {
+      "id": "CallRAGBot",
+      "parameters": {
+        "url": "http://192.168.1.3:5000/ask",
+        "method": "POST",
+        "sendBody": true,
+        "jsonParameters": true,
+        "options": {
+          "bodyContentType": "raw"
+        },
+        "bodyContentType": "raw",
+        "bodyParametersJson": "{\n  \"query\": \"={{ $json.query }}\"\n}",
+        "headerParameters": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "name": "Call RAG Bot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "id": "ShowAnswer",
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Answer",
+              "value": "={{ $json.answer }}"
+            },
+            {
+              "name": "Sources",
+              "value": "={{ $json.sources.join(\", \") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Show Answer",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [700, 300]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [[{ "node": "Set Query", "type": "main", "index": 0 }]]
+    },
+    "Set Query": {
+      "main": [[{ "node": "Call RAG Bot", "type": "main", "index": 0 }]]
+    },
+    "Call RAG Bot": {
+      "main": [[{ "node": "Show Answer", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "name": "RAG Bot Full Flow"
+}
