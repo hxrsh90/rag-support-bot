@@ -31,7 +31,7 @@ A Retrieval-Augmented Generation (RAG) support bot using LangChain, FAISS, Huggi
    ```
 5. **Run the Flask app:**
    ```sh
-   python rag_api/support_docs/app.py
+   python app.py
    ```
 6. **Ask questions:**
    Send a POST request to `http://localhost:5000/ask` with JSON `{ "query": "Your question" }`
@@ -48,6 +48,55 @@ A Retrieval-Augmented Generation (RAG) support bot using LangChain, FAISS, Huggi
    ```
 
 > **Note:** Ollama must be running and accessible from the container. For local testing, run Ollama on the host and use `--network=host` (Linux) or set up port forwarding (Windows/Mac).
+
+## n8n Integration
+
+You can easily use this bot in an n8n workflow to automate question answering. Here’s how:
+
+1. **Open n8n** (self-hosted or cloud).
+2. **Create a new workflow.**
+3. **Paste the following JSON into the workflow import dialog:**
+
+```json
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "http://localhost:5000/ask",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "query",
+              "value": "What is your return policy?"
+            }
+          ]
+        },
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        }
+      },
+      "id": 1,
+      "name": "Ask RAG Bot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {}
+}
+```
+
+4. **Edit the `query` value** to ask any question you want.
+5. **Run the workflow**. The response from the bot will be available in the output of the HTTP Request node.
+
+> **Tip:** You can connect this node to other n8n nodes (like Telegram, Slack, or Email) to automate support answers.
 
 ## Security
 - No private keys or sensitive files are included.
