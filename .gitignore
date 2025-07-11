@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# FAISS and pickle files
+rag_index/*.faiss
+rag_index/*.pkl
+
+# Jupyter and temp files
+*.ipynb_checkpoints
+*.swp
+*.swo
+
+# Private keys (do not add any keys to repo)
+*.key
+*.pem
+*.env 
